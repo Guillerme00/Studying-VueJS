@@ -1,19 +1,64 @@
 
 <script setup>
-  const img1 = "https://wallpapers.com/images/high/aot-pictures-28vwnt1csr51vhrj.webp";
-  const img2 = "https://img.goodfon.com/wallpaper/nbig/8/17/anime-cyberpunk-edgerunners-hd-wallpaper.webp";
-  const gosta = false;
-  const gosta2 = false;
+import { reactive } from 'vue';
+  const estado = reactive({
+    saldo: 5000,
+    transferindo: 0,
+    nomes: ["gui","gabriel","eduardo","gg"],
+    nomeInserir: '',
+  });
+
+  function saldoFuturo() {
+    const {saldo,transferindo} = estado;
+    if ((saldo-transferindo) >= 0) {
+      return saldo - transferindo;
+    } else {
+      return "Saldo insuficiente"
+    }
+  }
+
+  function cadastraNome() {
+    estado.nomes.push(estado.nomeInserir)
+  }
+
+
+
+
+
 </script>
 
 <template>
-  <img v-if="gosta" :src="img1" alt="">
-  <img v-else-if="gosta2" :src="img2 " alt="">
-  <h2 v-else>Burro</h2>
+  <br>
+  <hr>
+  <div class="banco">
+    <h2>Saldo: {{ estado.saldo }}.</h2>
+    <h3>Transferindo: {{ estado.transferindo }}</h3>
+    <h3>Saldo após a tranferencia: {{ saldoFuturo() }}</h3>
+    <input :class="{ invalido: estado.transferindo > estado.saldo }" @keyup="evento => estado.transferindo = evento.target.value" type="number" placeholder="Quantia para transferir">
+  </div>
+  <br>
+  <hr>
+  <ul>
+    <li v-for="nome in estado.nomes">
+      {{ nome }}
+    </li>
+  </ul>
+  <input @keyup="evento => estado.nomeInserir = evento.target.value" type="text" placeholder="Digite um novo nome:">
+  <button @click="cadastraNome()" type="button">Cadastrar</button>
 </template>
 
 <style scoped>
-  img {
-    max-width: 480px;
+  .invalido {
+    border-color: red;
+    outline-color: red;
+  }
+  .banco {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    .sub {
+      margin-top: 16px;
+    }
   }
 </style>
